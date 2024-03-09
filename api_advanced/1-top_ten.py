@@ -1,18 +1,32 @@
 #!/usr/bin/python3
-"""1-top_ten.py"""
-
+"""
+Returns the number of subscribers from a subreddit
+"""
 import requests
 
 
-def top_ten(subreddit):
-    """Top ten subreddit"""
-    url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
-    headers = {'User-Agent': 'My-User-Agent'}
+def number_of_subscribers(subreddit):
+    """ Set a custom header user-agent """
+    headers = {"User-Agent": "ALU-scripting API 0.1"}
+    url = "https://www.reddit.com/r/{}.json".format(subreddit)
 
-    response = requests.get(url, headers=headers, allow_redirects=False)
+    try:
+        response = requests.get(url, headers=headers,
+                                timeout=30, allow_redirects=False)
+
+    except requests.exceptions.Timeout:
+        return "The request Timed out"
+
     if response.status_code == 200:
-        data = response.json()
-        posts = data.get('data').get('children')
-        [print(post.get('data').get('title')) for post in posts]
+        json_data = response.json()
+        subscriber_number = (
+            json_data.get("data")
+            .get("children")[0]
+            .get("data")
+            .get("subreddit_subscribers")
+        )
+        return subscriber_number
+    elif response.status_code == 404:
+        return 0
     else:
-        print(None)
+        return 0
