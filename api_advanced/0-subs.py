@@ -2,8 +2,10 @@
 '''
     This module contains the function number_of_subscribers
 '''
+
 import requests
 from sys import argv
+
 
 def number_of_subscribers(subreddit):
     '''
@@ -24,6 +26,7 @@ def number_of_subscribers(subreddit):
     except KeyError:
         print("Subreddit not found or unable to fetch data.")
         return 0
+
 
 if __name__ == "__main__":
     if len(argv) != 2:
